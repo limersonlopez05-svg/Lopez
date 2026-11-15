@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Limerson Lopez — Full-Stack Developer &amp; 3D Creative Technologist</title>
+  <meta
+    name="description"
+    content="Portfolio of Limerson Lopez — 4th-year BSIT student at STI College Batangas, Full-Stack Web Developer behind TraxVet, 3D Python/Blender scripter, and Network Security enthusiast."
+  />
+  <link
+    rel="icon"
+    type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23050814'/%3E%3Crect x='2' y='2' width='60' height='60' rx='14' fill='none' stroke='%233b82f6' stroke-width='3'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' fill='%2360a5fa' font-family='sans-serif' font-weight='800' font-size='32'%3EL%3C/text%3E%3C/svg%3E"
+  />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            space: {
+              950: '#050814',
+              900: '#0a0f24'
+            },
+            electric: {
+              400: '#60a5fa',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af'
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Three.js (UMD build for universal http:// and file:// support) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Modular Application Scripts -->
+  <script src="js/data.js" defer></script>
+  <script src="js/audio.js" defer></script>
+  <script src="js/starfield.js" defer></script>
+  <script src="js/lanyard.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body class="relative antialiased selection:bg-blue-500/30 selection:text-white">
+  <!-- ======================================================================
+       PRELOADER SCREEN
+       ====================================================================== -->
+  <div id="preloader" role="status" aria-live="polite" aria-label="Loading portfolio assets">
+    <div class="w-full max-w-xs px-6 text-center">
+      <div
+        id="preloader-percent"
+        class="font-display text-6xl sm:text-7xl font-bold tracking-tight text-gradient-blue mb-5"
+      >
+        0%
+      </div>
+      <div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden mb-4">
+        <div
+          id="preloader-bar"
+          class="h-full w-0 rounded-full bg-gradient-to-r from-blue-600 via-blue-400 to-sky-300 shadow-[0_0_16px_rgba(59,130,246,0.9)]"
+        ></div>
+      </div>
+      <p class="text-xs font-mono-tech uppercase tracking-[0.26em] text-slate-400">
+        Loading assets...
+      </p>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       FIXED AMBIENT ORBS + STARFIELD & THREE.JS WEBGL BACKGROUND
+       ====================================================================== -->
+  <div class="ambient-orb orb-1" aria-hidden="true"></div>
+  <div class="ambient-orb orb-2" aria-hidden="true"></div>
+  <div class="ambient-orb orb-3" aria-hidden="true"></div>
+  <canvas id="starfield-canvas" aria-hidden="true"></canvas>
+  <canvas id="webgl-bg-canvas" aria-hidden="true"></canvas>
+
+  <!-- ======================================================================
+       FLOATING PILL NAVBAR
+       ====================================================================== -->
+  <header class="fixed top-4 sm:top-6 inset-x-0 z-50 flex justify-center px-3 pointer-events-none">
+    <nav
+      class="nav-pill pointer-events-auto rounded-full px-2 sm:px-3 py-1.5 flex items-center gap-1 sm:gap-1.5 max-w-full"
+      aria-label="Primary navigation"
+    >
+      <a
+        href="#home"
+        data-section="home"
+        class="nav-link active px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium"
+      >
+        Home
+      </a>
+      <a
+        href="#about"
+        data-section="about"
+        class="nav-link px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium"
+      >
+        About
+      </a>
+      <a
+        href="#portfolio"
+        data-section="portfolio"
+        class="nav-link px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium"
+      >
+        Portfolio
+      </a>
+      <a
+        href="#contact"
+        data-section="contact"
+        class="nav-link px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium"
+      >
+        Contact
+      </a>
+    </nav>
+  </header>
+
+  <!-- ======================================================================
+       MAIN CONTENT
+       ====================================================================== -->
+  <main class="relative z-10">
+    <!-- ====================================================================
+         SECTION A: HERO SECTION (2-Column Layout)
+         ==================================================================== -->
+    <section
+      id="home"
+      class="relative min-h-screen max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 pt-28 pb-16 lg:pt-24 lg:pb-20 flex items-center"
+    >
+      <div class="w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+        <!-- Left Column -->
+        <div class="lg:col-span-7 space-y-6">
+          <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full glass-subtle text-xs font-medium text-blue-300">
+            <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+            <span>Open for 486-Hour OJT Internship</span>
+          </div>
+
+          <h1 class="font-display font-bold tracking-tight leading-[1.03]">
+            <span class="block text-2xl sm:text-4xl lg:text-5xl text-gradient-blue mb-1.5">
+              Welcome to
+            </span>
+            <span class="block text-5xl sm:text-6xl lg:text-7xl text-white">
+              My Portfolio
+            </span>
+          </h1>
+
+          <!-- Typewriter Sub-heading -->
+          <div class="min-h-[2.25rem] flex items-center text-lg sm:text-2xl font-display font-semibold text-slate-200">
+            <span class="text-blue-400 mr-2 font-mono-tech">&gt;_</span>
+            <span id="hero-typewriter">Full-Stack Web Developer</span>
+            <span class="typewriter-cursor" aria-hidden="true"></span>
+          </div>
+
+          <p class="max-w-xl text-base sm:text-lg text-slate-400 leading-relaxed">
+            Driven by curiosity and a passion for building end-to-end systems. I enjoy experimenting with full-stack code, designing clean database architectures, and automating 3D graphics—turning complex problems into intuitive, functional digital experiences.
+          </p>
+
+          <!-- CTA Buttons -->
+          <div class="flex flex-wrap items-center gap-3 sm:gap-3.5 pt-1">
+            <button
+              id="open-resume-modal-btn"
+              type="button"
+              class="btn-electric inline-flex items-center gap-2 px-5 sm:px-6 py-3 sm:py-3.5 rounded-full text-sm sm:text-base font-semibold text-white"
+            >
+              <svg viewBox="0 0 24 24" class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="16" y1="13" x2="8" y2="13" />
+                <line x1="16" y1="17" x2="8" y2="17" />
+              </svg>
+              <span>Resume</span>
+            </button>
+
+            <button
+              id="open-cover-letter-modal-btn"
+              type="button"
+              class="glass-subtle border border-blue-400/35 hover:border-blue-400/75 inline-flex items-center gap-2 px-5 sm:px-6 py-3 sm:py-3.5 rounded-full text-sm sm:text-base font-semibold text-white hover:shadow-[0_0_24px_rgba(59,130,246,0.3)] transition-all"
+            >
+              <svg viewBox="0 0 24 24" class="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <rect x="2" y="4" width="20" height="16" rx="2" />
+                <path d="M22 7l-10 6L2 7" />
+              </svg>
+              <span>Cover Letter</span>
+            </button>
+
+            <a
+              href="#portfolio"
+              data-jump-projects
+              class="glass-subtle inline-flex items-center gap-2 px-5 sm:px-6 py-3 sm:py-3.5 rounded-full text-sm sm:text-base font-semibold text-white hover:shadow-[0_0_24px_rgba(59,130,246,0.28)]"
+            >
+              <span>View Projects</span>
+              <span aria-hidden="true">→</span>
+            </a>
+          </div>
+
+          <!-- Social Row -->
+          <div class="flex items-center gap-4 pt-3">
+            <span class="text-xs font-mono-tech tracking-[0.24em] uppercase text-slate-400">
+              FIND ME
+            </span>
+            <span class="w-8 h-px bg-white/15" aria-hidden="true"></span>
+            <div class="flex items-center gap-3">
+              <a
+                href="https://github.com/limersonlopez05-svg"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Limerson Lopez on GitHub"
+                class="w-10 h-10 rounded-full glass-subtle flex items-center justify-center text-slate-300 hover:text-white hover:scale-105 transition-all"
+              >
+                <svg viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true">
+                  <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+                </svg>
+              </a>
+              <a
+                href="https://www.instagram.com/lmrsnlpz_?psln=MTdzMWt2OXJ3N2xtYg%3D%3D&utm_source=qr"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Limerson Lopez on Instagram (@lmrsnlpz_)"
+                class="w-10 h-10 rounded-full glass-subtle flex items-center justify-center text-slate-300 hover:text-white hover:scale-105 transition-all"
+              >
+                <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true">
+                  <rect x="3" y="3" width="18" height="18" rx="5" />
+                  <circle cx="12" cy="12" r="4" />
+                  <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+                </svg>
+              </a>
+              <a
+                href="https://www.facebook.com/share/14w1ThZnrEs/?mibextid=wwXIfr"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Limerson Lopez on Facebook"
+                class="w-10 h-10 rounded-full glass-subtle flex items-center justify-center text-slate-300 hover:text-white hover:scale-105 transition-all"
+              >
+                <svg viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true">
+                  <path d="M13.5 22v-8h2.7l.4-3h-3.1V9.1c0-.9.3-1.5 1.6-1.5h1.6V4.9c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.4-4 4.1V11H7.7v3h2.6v8h3.2z" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Interactive 3D Lanyard ID Card -->
+        <div class="lg:col-span-5 flex flex-col items-center">
+          <div id="lanyard-stage" class="lanyard-stage">
+            <!-- Mobile/Tablet Top Anchor Mount (hidden on desktop where strap goes to viewport top) -->
+            <div
+              class="lg:hidden absolute -top-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 px-4 py-1 rounded-full bg-[#091026] border border-blue-400/35 shadow-[0_0_20px_rgba(59,130,246,0.3)] pointer-events-none"
+              aria-hidden="true"
+            >
+              <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
+              <span class="w-8 h-1 rounded-full bg-slate-500/70"></span>
+              <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
+            </div>
+
+            <!-- Dynamic SVG Lanyard Strap with "DEVELOPER" printed along the ribbon -->
+            <svg
+              id="lanyard-strap-svg"
+              class="lanyard-strap-svg"
+              viewBox="0 0 340 540"
+              aria-hidden="true"
+            >
+              <defs>
+                <linearGradient id="strapGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#070b1a" />
+                  <stop offset="55%" stop-color="#0f172a" />
+                  <stop offset="100%" stop-color="#172554" />
+                </linearGradient>
+              </defs>
+              <!-- Strap fabric body -->
+              <path
+                id="lanyard-strap-path"
+                d="M 170 0 Q 170 212 170 424"
+                fill="none"
+                stroke="url(#strapGrad)"
+                stroke-width="34"
+                stroke-linecap="round"
+              />
+              <!-- Subtle blue stitching edges -->
+              <path
+                id="lanyard-strap-edge-l"
+                d="M 155 0 Q 155 212 155 424"
+                fill="none"
+                stroke="rgba(59, 130, 246, 0.35)"
+                stroke-width="1.2"
+                stroke-dasharray="4 4"
+              />
+              <path
+                id="lanyard-strap-edge-r"
+                d="M 185 0 Q 185 212 185 424"
+                fill="none"
+                stroke="rgba(59, 130, 246, 0.35)"
+                stroke-width="1.2"
+                stroke-dasharray="4 4"
+              />
+              <!-- Printed Text along the dynamic strap -->
+              <text
+                fill="#93c5fd"
+                font-size="10.5"
+                font-weight="700"
+                font-family="Space Grotesk, sans-serif"
+                letter-spacing="3.2"
+                dominant-baseline="central"
+              >
+                <textPath href="#lanyard-strap-path" startOffset="54%" text-anchor="middle">
+                  DEVELOPER • DEVELOPER • DEVELOPER • DEVELOPER
+                </textPath>
+              </text>
+            </svg>
+
+            <!-- Swinging Rig (Clasp + Interactive 3D ID Badge) -->
+            <div
+              id="lanyard-rig"
+              class="lanyard-rig"
+              aria-label="Interactive 3D Developer ID Card for Limerson Lopez. Drag to swing or hover to tilt."
+            >
+              <!-- Metallic Swivel Clasp & Grommet -->
+              <div class="lanyard-clasp" aria-hidden="true">
+                <div class="w-9 h-3.5 rounded-t-md bg-gradient-to-b from-slate-600 to-slate-800 border border-slate-400/40 shadow-md"></div>
+                <div class="w-4 h-4 -mt-0.5 rounded-full border-2 border-slate-300/70 bg-[#050814] shadow-inner"></div>
+                <div class="w-7 h-2.5 -mt-1 rounded-sm bg-gradient-to-b from-slate-300 to-slate-500 shadow"></div>
+              </div>
+
+              <!-- 3D Perspective Card Container -->
+              <div class="lanyard-card-shell">
+                <div id="lanyard-card-3d" class="lanyard-card-3d">
+                  <!-- FRONT OF CARD -->
+                  <div class="lanyard-face lanyard-front p-5 flex flex-col justify-between">
+                    <div class="card-holo-grid"></div>
+                    <div class="card-sheen"></div>
+
+                    <!-- Card Slot Punch & Header -->
+                    <div class="relative z-10 flex flex-col items-center">
+                      <div class="w-12 h-2.5 rounded-full bg-[#03050d] border border-white/15 shadow-inner mb-3"></div>
+                      <div class="w-full flex items-center justify-between">
+                        <span class="font-display text-sm font-bold tracking-[0.22em] text-blue-400">
+                          DEVELOPER
+                        </span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-[0_0_10px_#3b82f6]"></span>
+                      </div>
+                    </div>
+
+                    <!-- Center Portrait + Vertical Side Text -->
+                    <div class="relative z-10 my-3 flex items-stretch gap-3 flex-1 min-h-0">
+                      <div class="flex-1 rounded-2xl overflow-hidden border border-blue-400/30 bg-[#070c1e] relative shadow-inner">
+                        <img
+                          src="assets/limerson-id.jpg"
+                          alt="Formal portrait of Limerson Lopez"
+                          class="w-full h-full object-cover object-top pointer-events-none select-none"
+                          draggable="false"
+                        />
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#050814]/80 via-transparent to-transparent"></div>
+                        <span class="absolute bottom-2 left-2.5 px-2 py-0.5 rounded-md text-[10px] font-mono-tech bg-blue-500/20 border border-blue-400/35 text-blue-200 backdrop-blur-sm">
+                          ID #BSIT-04
+                        </span>
+                      </div>
+                      <div class="flex items-center justify-center">
+                        <span class="vertical-side-label text-[10px] font-mono-tech font-semibold text-slate-400 uppercase">
+                          FULL-STACK DEVELOPER
+                        </span>
+                      </div>
+                    </div>
+
+                    <!-- Name & Footer -->
+                    <div class="relative z-10 pt-2 border-t border-white/10">
+                      <p class="font-display text-xl font-bold tracking-wide text-white leading-tight">
+                        LIMERSON LOPEZ
+                      </p>
+                      <div class="flex items-center justify-between mt-1.5">
+                        <span class="text-[11px] font-mono-tech tracking-[0.25em] text-blue-400 font-semibold">
+                          PORTFOLIO
+                        </span>
+                        <span class="text-[10px] font-mono-tech text-slate-400">
+                          STI BATANGAS
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Interaction Hint -->
+          <div class="mt-3 flex items-center justify-center">
+            <span class="text-xs font-mono-tech text-slate-400">
+              Drag to swing • Hover to tilt in 3D
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SECTION B: ABOUT ME SECTION
+         ==================================================================== -->
+    <section id="about" class="relative py-24 px-5 sm:px-8 lg:px-12 max-w-7xl mx-auto">
+      <div class="text-center mb-16 reveal-up">
+        <span class="inline-block text-xs font-mono-tech uppercase tracking-[0.28em] text-blue-400 mb-3">
+          Who I Am
+        </span>
+        <h2 class="font-display text-4xl sm:text-5xl font-bold text-white text-glow-blue">
+          About Me
+        </h2>
+      </div>
+
+      <!-- 3-Column Main Bio Row (Open Cosmic Composition) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center mb-16 lg:mb-20 reveal-up">
+        <!-- Left Bio Intro -->
+        <div class="lg:col-span-4 space-y-5 text-center lg:text-left">
+          <div>
+            <p class="font-display text-2xl sm:text-3xl font-bold text-gradient-blue tracking-tight">
+              Hi, I'm
+            </p>
+            <h3 class="font-display text-4xl sm:text-5xl xl:text-[3.35rem] font-bold text-white leading-[1.06] tracking-tight mt-1">
+              Limerson<br class="hidden sm:inline" /> Lopez
+            </h3>
+          </div>
+          <div class="pt-1">
+            <a
+              href="#contact"
+              data-jump-contact
+              class="btn-electric inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold text-white"
+            >
+              <span>Contact Me</span>
+              <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Center Frameless Floating Portrait with Interactive Hover/Click Easter Egg -->
+        <div class="lg:col-span-4 flex flex-col items-center">
+          <div
+            id="about-portrait-box"
+            role="button"
+            tabindex="0"
+            aria-pressed="false"
+            aria-label="Toggle STI campus uniform portrait Easter egg"
+            title="Hover or click to toggle STI Campus Mode"
+            class="portrait-easter-egg relative w-64 sm:w-72 lg:w-80 aspect-[4/5] select-none"
+          >
+            <div class="portrait-cosmic-aura absolute -inset-4 rounded-full pointer-events-none" aria-hidden="true"></div>
+            <div class="portrait-fade-cutout relative z-10 w-full h-full">
+              <img
+                src="assets/limerson-cutout.png"
+                alt="Limerson Lopez formal studio cutout portrait"
+                class="portrait-base portrait-fade-sides w-full h-full object-contain object-bottom drop-shadow-[0_18px_36px_rgba(37,99,235,0.28)]"
+              />
+              <img
+                src="assets/limerson-sti-cutout.png"
+                alt="Limerson Lopez in STI College Batangas uniform cutout"
+                class="portrait-alt absolute inset-0 w-full h-full object-contain object-bottom drop-shadow-[0_18px_36px_rgba(37,99,235,0.28)]"
+              />
+            </div>
+            <div class="portrait-badge-hint absolute bottom-1 inset-x-0 z-20 flex justify-center pointer-events-none">
+              <span
+                id="easter-egg-badge"
+                class="px-3 py-1 rounded-full text-[11px] font-mono-tech bg-[#050814]/85 border border-blue-400/35 text-blue-200 backdrop-blur-md"
+              >
+                Hover or Click Portrait ✨
+              </span>
+            </div>
+          </div>
+          <!-- Subtle Glowing Blue Floor Shadow -->
+          <div class="w-56 h-6 -mt-3 rounded-full portrait-floor-shadow pointer-events-none" aria-hidden="true"></div>
+        </div>
+
+        <!-- Right Frameless Bio Copy + CTA -->
+        <div class="lg:col-span-4 space-y-5 text-center lg:text-left max-w-md mx-auto lg:mx-0">
+          <p class="text-sm sm:text-[15px] text-slate-300 leading-relaxed">
+            I am a 4th-year BSIT student at <span class="text-white font-medium">STI College Batangas</span> and a Full-Stack Web Developer. As the team leader and sole developer behind <span class="text-white font-semibold">TraxVet</span> (Veterinary Information System), I specialize in combining clean backend code, MySQL database design, and modern UI/UX to build impactful digital products. Currently seeking a <span class="text-blue-400 font-semibold">486-hour OJT internship</span>.
+          </p>
+          <div>
+            <a
+              href="#portfolio"
+              data-jump-projects
+              class="glass-subtle inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-white"
+            >
+              <svg viewBox="0 0 24 24" class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M7 7h10v10"/></svg>
+              <span>View Projects</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Education & Experience Grid (2 Columns) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 reveal-up">
+        <article class="glass-card rounded-3xl p-6 sm:p-7 flex flex-col justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-11 h-11 rounded-2xl bg-blue-500/15 border border-blue-400/30 text-blue-400 flex items-center justify-center shrink-0">
+                <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M22 10L12 5 2 10l10 5 10-5z" />
+                  <path d="M6 12.5V17c0 1.7 2.7 3 6 3s6-1.3 6-3v-4.5" />
+                </svg>
+              </div>
+              <div>
+                <span class="text-xs font-mono-tech uppercase tracking-wider text-blue-400">Education</span>
+                <h3 class="text-lg font-bold text-white">STI College Batangas</h3>
+              </div>
+            </div>
+            <p class="text-sm font-medium text-slate-200 mb-1">
+              Bachelor of Science in Information Technology (4th Year, BSIT)
+            </p>
+            <p class="text-xs text-blue-300 font-mono-tech mb-2">
+              Expected Graduation: 2027
+            </p>
+            <p class="text-xs text-slate-400 flex items-center gap-1.5 mb-3">
+              <span class="text-blue-400" aria-hidden="true">📍</span>
+              <span>Location: Malabrigo, Lobo, Batangas</span>
+            </p>
+            <p class="text-[11px] font-mono-tech uppercase tracking-wider text-slate-400 mb-1.5">
+              Relevant Coursework
+            </p>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="px-2 py-0.5 rounded-md text-[11px] bg-white/5 border border-white/10 text-slate-300">Web Development</span>
+              <span class="px-2 py-0.5 rounded-md text-[11px] bg-white/5 border border-white/10 text-slate-300">Database Management Systems</span>
+              <span class="px-2 py-0.5 rounded-md text-[11px] bg-white/5 border border-white/10 text-slate-300">Systems Analysis &amp; Design</span>
+              <span class="px-2 py-0.5 rounded-md text-[11px] bg-white/5 border border-white/10 text-slate-300">Object-Oriented Programming</span>
+              <span class="px-2 py-0.5 rounded-md text-[11px] bg-white/5 border border-white/10 text-slate-300">Networking Fundamentals</span>
+              <span class="px-2 py-0.5 rounded-md text-[11px] bg-white/5 border border-white/10 text-slate-300">Information Security</span>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-white/10 space-y-1 text-xs text-slate-400">
+            <div class="flex justify-between gap-2">
+              <span class="text-slate-300">Lobo Senior High School</span>
+              <span class="font-mono-tech text-slate-400">2021–2023</span>
+            </div>
+            <div class="flex justify-between gap-2">
+              <span class="text-slate-300">Malabrigo National High School</span>
+              <span class="font-mono-tech text-slate-400">2017–2021</span>
+            </div>
+            <div class="flex justify-between gap-2">
+              <span class="text-slate-300">Malabrigo Elementary School</span>
+              <span class="font-mono-tech text-slate-400">2011–2017</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="glass-card rounded-3xl p-6 sm:p-7 flex flex-col justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-11 h-11 rounded-2xl bg-blue-500/15 border border-blue-400/30 text-blue-400 flex items-center justify-center shrink-0">
+                <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <rect x="2" y="7" width="20" height="14" rx="2" />
+                  <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" />
+                </svg>
+              </div>
+              <div>
+                <span class="text-xs font-mono-tech uppercase tracking-wider text-blue-400">Experience / Leadership</span>
+                <h3 class="text-lg font-bold text-white">Capstone Project Team Leader</h3>
+              </div>
+            </div>
+            <p class="text-sm font-medium text-slate-200 mb-1.5">
+              Sole Full-Stack Developer — TraxVet (VIS) &amp; Student Information Management System
+            </p>
+            <p class="text-xs text-slate-400 leading-relaxed mb-3">
+              End-to-end architecture: PHP backend, normalized MySQL schemas, responsive portfolio &amp; web interfaces.
+            </p>
+            <p class="text-[11px] font-mono-tech uppercase tracking-wider text-slate-400 mb-1.5">
+              Core Strengths &amp; Soft Skills
+            </p>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="px-2 py-0.5 rounded-md text-[11px] bg-blue-500/10 border border-blue-400/20 text-blue-200">Problem-Solving &amp; Analytical Thinking</span>
+              <span class="px-2 py-0.5 rounded-md text-[11px] bg-blue-500/10 border border-blue-400/20 text-blue-200">Team Collaboration</span>
+              <span class="px-2 py-0.5 rounded-md text-[11px] bg-blue-500/10 border border-blue-400/20 text-blue-200">Time Management</span>
+              <span class="px-2 py-0.5 rounded-md text-[11px] bg-blue-500/10 border border-blue-400/20 text-blue-200">Communication Skills</span>
+              <span class="px-2 py-0.5 rounded-md text-[11px] bg-blue-500/10 border border-blue-400/20 text-blue-200">Adaptability</span>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-white/10 flex flex-wrap items-center justify-between gap-2 text-xs">
+            <span class="text-slate-300 font-medium">Required OJT: <strong class="text-white">486 Hours</strong></span>
+            <span class="px-2.5 py-1 rounded-full bg-blue-500/15 border border-blue-400/30 text-blue-300 font-mono-tech text-[11px]">
+              Preferred Start: February 2027
+            </span>
+          </div>
+        </article>
+      </div>
+
+      <!-- Stats Counter Row (3 Glass Cards) -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6 reveal-up">
+        <div class="glass-card rounded-3xl p-6 text-center">
+          <div
+            id="about-projects-counter"
+            class="stat-counter font-display text-4xl sm:text-5xl font-bold text-gradient-blue mb-1"
+            data-target="3"
+            data-suffix=""
+          >
+            3
+          </div>
+          <p class="text-xs font-mono-tech uppercase tracking-[0.2em] text-white font-semibold">
+            PROJECTS
+          </p>
+          <p class="text-xs text-slate-400 mt-1">Systems, 3D &amp; NetSec</p>
+        </div>
+
+        <div class="glass-card rounded-3xl p-6 text-center">
+          <div
+            class="stat-counter font-display text-4xl sm:text-5xl font-bold text-gradient-blue mb-1"
+            data-target="486"
+            data-suffix=""
+          >
+            486
+          </div>
+          <p class="text-xs font-mono-tech uppercase tracking-[0.2em] text-white font-semibold">
+            OJT HOURS
+          </p>
+          <p class="text-xs text-slate-400 mt-1">Preferred Start: Feb 2027</p>
+        </div>
+
+        <div class="glass-card rounded-3xl p-6 text-center">
+          <div
+            class="stat-counter font-display text-4xl sm:text-5xl font-bold text-gradient-blue mb-1"
+            data-target="100"
+            data-suffix="%"
+          >
+            100%
+          </div>
+          <p class="text-xs font-mono-tech uppercase tracking-[0.2em] text-white font-semibold">
+            FULL-STACK
+          </p>
+          <p class="text-xs text-slate-400 mt-1">End-to-End Ownership</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SECTION C: PORTFOLIO SECTION (Tabbed Showcase + Detail View Modal)
+         ==================================================================== -->
+    <section id="portfolio" class="relative py-24 px-5 sm:px-8 lg:px-12 max-w-7xl mx-auto">
+      <div class="text-center mb-12 reveal-up">
+        <span class="inline-block text-xs font-mono-tech uppercase tracking-[0.28em] text-blue-400 mb-3">
+          Selected Works &amp; Skills
+        </span>
+        <h2 class="font-display text-4xl sm:text-5xl font-bold text-white text-glow-blue mb-4">
+          Portfolio Showcase
+        </h2>
+        <p class="max-w-2xl mx-auto text-sm sm:text-base text-slate-400">
+          Explore full-stack systems, 3D Python automation pipelines, and network packet inspection labs.
+        </p>
+      </div>
+
+      <!-- Centered Pill Tab Bar Navigation -->
+      <div class="flex justify-center mb-10 reveal-up">
+        <div
+          role="tablist"
+          aria-label="Portfolio categories"
+          class="nav-pill p-1.5 rounded-full inline-flex flex-wrap justify-center gap-1.5"
+        >
+          <button
+            type="button"
+            role="tab"
+            aria-selected="true"
+            data-tab="projects"
+            class="portfolio-tab px-5 py-2.5 rounded-full text-sm font-semibold text-white btn-electric transition-all inline-flex items-center gap-2"
+          >
+            <span class="font-mono-tech text-xs">&lt;&gt;</span>
+            <span>Projects</span>
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected="false"
+            data-tab="certificates"
+            class="portfolio-tab px-5 py-2.5 rounded-full text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-all"
+          >
+            Certificates
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected="false"
+            data-tab="techstack"
+            class="portfolio-tab px-5 py-2.5 rounded-full text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-all"
+          >
+            Tech Stack
+          </button>
+        </div>
+      </div>
+
+      <!-- Dynamic Tab Content Stage -->
+      <div id="portfolio-stage" class="min-h-[360px]"></div>
+    </section>
+
+    <!-- ====================================================================
+         SECTION D: DIRECT CONTACT & SOCIALS
+         ==================================================================== -->
+    <section id="contact" class="relative py-24 px-5 sm:px-8 lg:px-12 max-w-6xl mx-auto">
+      <div class="text-center mb-12 reveal-up">
+        <span class="inline-block text-xs font-mono-tech uppercase tracking-[0.28em] text-blue-400 mb-3">
+          Collaborate &amp; Connect
+        </span>
+        <h2 class="font-display text-4xl sm:text-5xl font-bold text-white text-glow-blue mb-3">
+          Let&rsquo;s Connect
+        </h2>
+        <p class="max-w-xl mx-auto text-sm sm:text-base text-slate-400">
+          Open for 486-hour IT OJT opportunities (Preferred Start: Feb 2027), full-stack web builds, and technical collaborations.
+        </p>
+
+        <!-- Direct Contact Chips -->
+        <div class="mt-7 flex flex-wrap items-center justify-center gap-3">
+          <a
+            href="mailto:limersonlopez05@gmail.com"
+            class="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-2xl glass-card text-xs sm:text-sm text-slate-200 hover:text-white border border-white/10 hover:border-blue-400/50 transition-colors"
+          >
+            <svg viewBox="0 0 24 24" class="w-4 h-4 text-blue-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <rect x="2" y="4" width="20" height="16" rx="2" />
+              <path d="M22 6l-10 7L2 6" />
+            </svg>
+            <span>limersonlopez05@gmail.com</span>
+          </a>
+
+          <a
+            href="tel:+639053782092"
+            class="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-2xl glass-card text-xs sm:text-sm text-slate-200 hover:text-white border border-white/10 hover:border-blue-400/50 transition-colors"
+          >
+            <svg viewBox="0 0 24 24" class="w-4 h-4 text-blue-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z" />
+            </svg>
+            <span>0905-378-2092</span>
+          </a>
+
+          <span class="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl glass-subtle text-xs sm:text-sm text-slate-300 border border-white/10">
+            <svg viewBox="0 0 24 24" class="w-4 h-4 text-blue-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+            <span>Malabrigo, Lobo, Batangas</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- Find Me Online Social Grid -->
+      <div class="w-full reveal-up">
+        <p class="text-xs font-mono-tech uppercase tracking-[0.22em] text-slate-400 text-center mb-4">
+          Find Me Online
+        </p>
+        <div id="contact-social-stack" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ======================================================================
+       SECTION E: FOOTER
+       ====================================================================== -->
+  <footer class="relative z-10 border-t border-white/10 bg-[#040712]/80 backdrop-blur-xl">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 py-12">
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 pb-8 border-b border-white/10">
+        <div class="max-w-md space-y-2">
+          <a href="#home" class="font-display text-2xl font-bold text-white tracking-tight">
+            Limerson<span class="text-blue-400">.Dev</span>
+          </a>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            Building modern web experiences with clean code, sharp typography, and interactive 3D.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-6 text-sm text-slate-400">
+          <a href="#home" class="hover:text-white transition-colors">Home</a>
+          <a href="#about" class="hover:text-white transition-colors">About</a>
+          <a href="#portfolio" class="hover:text-white transition-colors">Portfolio</a>
+          <a href="#contact" class="hover:text-white transition-colors">Contact</a>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <a
+            href="https://github.com/limersonlopez05-svg"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+            class="w-9 h-9 rounded-full glass-subtle flex items-center justify-center text-slate-300 hover:text-white"
+          >
+            <svg viewBox="0 0 24 24" class="w-4 h-4" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+          </a>
+          <a
+            href="https://www.instagram.com/lmrsnlpz_?psln=MTdzMWt2OXJ3N2xtYg%3D%3D&amp;utm_source=qr"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+            class="w-9 h-9 rounded-full glass-subtle flex items-center justify-center text-slate-300 hover:text-white"
+          >
+            <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a
+            href="https://www.facebook.com/share/14w1ThZnrEs/?mibextid=wwXIfr"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Facebook"
+            class="w-9 h-9 rounded-full glass-subtle flex items-center justify-center text-slate-300 hover:text-white"
+          >
+            <svg viewBox="0 0 24 24" class="w-4 h-4" fill="currentColor"><path d="M13.5 22v-8h2.7l.4-3.1h-3.1V8.9c0-.9.25-1.5 1.55-1.5h1.65V4.6c-.29-.04-1.27-.12-2.41-.12-2.38 0-4.01 1.45-4.01 4.12v2.3H7.6V14h2.68v8h3.22z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+        <p>&copy; 2026 Limerson Lopez. All rights reserved.</p>
+        <button
+          id="back-to-top-btn"
+          type="button"
+          class="glass-subtle px-4 py-2 rounded-full text-xs font-semibold text-slate-200 hover:text-white inline-flex items-center gap-1.5"
+        >
+          <span>Back to Top</span>
+          <span aria-hidden="true">↑</span>
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ======================================================================
+       PROJECT CASE STUDY DETAIL MODAL
+       ====================================================================== -->
+  <div
+    id="project-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-project-title"
+    class="fixed inset-0 z-[80] hidden items-center justify-center p-4 sm:p-6 lg:p-10 modal-backdrop overflow-y-auto"
+  >
+    <div class="glass-card w-full max-w-5xl rounded-3xl overflow-hidden my-auto border border-blue-400/30">
+      <!-- Breadcrumb Header -->
+      <div class="px-5 sm:px-8 py-4 border-b border-white/10 bg-[#050814]/65 flex items-center justify-between gap-4 flex-wrap">
+        <div class="flex items-center gap-3 text-xs sm:text-sm">
+          <button
+            type="button"
+            data-close-project-modal
+            class="glass-subtle px-3.5 py-1.5 rounded-full text-slate-200 hover:text-white font-medium inline-flex items-center gap-1.5"
+          >
+            <span aria-hidden="true">←</span>
+            <span>Back</span>
+          </button>
+          <span class="text-slate-600" aria-hidden="true">|</span>
+          <span class="text-slate-400">Projects</span>
+          <span class="text-slate-600" aria-hidden="true">&gt;</span>
+          <span id="modal-breadcrumb-title" class="text-blue-400 font-semibold truncate max-w-[200px] sm:max-w-xs">
+            Project Title
+          </span>
+        </div>
+
+        <button
+          type="button"
+          data-close-project-modal
+          aria-label="Close project case study"
+          class="w-9 h-9 rounded-full glass-subtle text-slate-300 hover:text-white flex items-center justify-center"
+        >
+          ✕
+        </button>
+      </div>
+
+      <!-- Case Study Body -->
+      <div class="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <!-- Left Overview & Tech Badges -->
+        <div class="lg:col-span-6 space-y-5">
+          <span
+            id="modal-project-badge"
+            class="inline-block px-3 py-1 rounded-full text-xs font-mono-tech bg-blue-500/15 border border-blue-400/30 text-blue-300"
+          >
+            Category
+          </span>
+          <h3 id="modal-project-title" class="font-display text-2xl sm:text-3xl font-bold text-white leading-tight">
+            Project Title
+          </h3>
+          <p id="modal-project-overview" class="text-sm sm:text-base text-slate-300 leading-relaxed"></p>
+
+          <ul id="modal-project-highlights" class="space-y-2"></ul>
+
+          <div class="pt-1">
+            <h4 class="text-xs font-mono-tech uppercase tracking-[0.2em] text-slate-400 mb-3">
+              Technologies Used
+            </h4>
+            <div id="modal-project-tech" class="flex flex-wrap gap-2"></div>
+          </div>
+
+          <div class="pt-2">
+            <a
+              id="modal-project-repo"
+              href="https://github.com/limersonlopez05-svg"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-electric inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold text-white"
+            >
+              <span>View Source on GitHub</span>
+              <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M7 7h10v10"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Right Interactive Screenshot Preview Frame -->
+        <div class="lg:col-span-6">
+          <div class="modal-image-frame rounded-2xl overflow-hidden border border-blue-400/30 bg-[#050814] shadow-[0_20px_50px_-15px_rgba(30,64,175,0.45)] relative">
+            <img
+              id="modal-project-image"
+              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+              alt="Project preview"
+              class="modal-image-zoom w-full aspect-video object-cover object-top"
+            />
+            <div class="px-4 py-2.5 bg-[#060a1c]/90 border-t border-white/10 flex items-center justify-between text-[11px] font-mono-tech text-slate-400">
+              <span>Interactive Preview</span>
+              <span class="text-blue-400">Hover to Zoom ↗</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       FULL RESUME DOCUMENT MODAL
+       ====================================================================== -->
+  <div
+    id="resume-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="resume-modal-title"
+    class="fixed inset-0 z-[80] hidden items-start sm:items-center justify-center p-4 sm:p-6 lg:p-10 modal-backdrop overflow-y-auto"
+  >
+    <div class="glass-card w-full max-w-4xl rounded-3xl overflow-hidden my-auto border border-blue-400/30">
+      <!-- Breadcrumb Header -->
+      <div class="px-5 sm:px-8 py-4 border-b border-white/10 bg-[#050814]/80 flex items-center justify-between gap-3 flex-wrap">
+        <div class="flex items-center gap-3 text-xs sm:text-sm">
+          <button
+            type="button"
+            data-close-resume-modal
+            class="glass-subtle px-3.5 py-1.5 rounded-full text-slate-200 hover:text-white font-medium inline-flex items-center gap-1.5"
+          >
+            <span aria-hidden="true">←</span>
+            <span>Back</span>
+          </button>
+          <span class="text-slate-600" aria-hidden="true">|</span>
+          <span class="text-slate-400">Home</span>
+          <span class="text-slate-600" aria-hidden="true">&gt;</span>
+          <span id="resume-modal-title" class="text-blue-400 font-semibold truncate">
+            Limerson_Lopez_Resume.pdf
+          </span>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <a
+            href="assets/Limerson_Lopez_Resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="glass-subtle px-3.5 py-1.5 rounded-full text-xs font-semibold text-slate-200 hover:text-white inline-flex items-center gap-1.5"
+          >
+            <span>Open PDF</span>
+            <span aria-hidden="true">↗</span>
+          </a>
+          <a
+            href="assets/Limerson_Lopez_Resume.pdf"
+            download="Limerson_Lopez_Resume.pdf"
+            class="btn-electric px-3.5 py-1.5 rounded-full text-xs font-semibold text-white inline-flex items-center gap-1.5"
+          >
+            <span>Download</span>
+            <span aria-hidden="true">↓</span>
+          </a>
+          <button
+            type="button"
+            data-close-resume-modal
+            aria-label="Close resume preview"
+            class="w-9 h-9 rounded-full glass-subtle text-slate-300 hover:text-white flex items-center justify-center"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <!-- Clean High-Contrast Document Sheet Body -->
+      <div class="p-4 sm:p-8 max-h-[80vh] overflow-y-auto bg-[#070d20]/60">
+        <article class="bg-white text-slate-900 rounded-xl shadow-2xl p-6 sm:p-10 max-w-3xl mx-auto text-left font-sans leading-relaxed">
+          <header class="text-center border-b-2 border-slate-900 pb-4 mb-5">
+            <h3 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-950">LIMERSON LOPEZ</h3>
+            <p class="text-xs sm:text-sm text-slate-600 mt-1">
+              Malabrigo, Lobo, Batangas &nbsp;|&nbsp;
+              <a href="tel:+639053782092" class="hover:underline text-slate-700">0905-378-2092</a> &nbsp;|&nbsp;
+              <a href="mailto:limersonlopez05@gmail.com" class="hover:underline text-blue-700 font-medium">limersonlopez05@gmail.com</a>
+            </p>
+          </header>
+
+          <section class="mb-5">
+            <h4 class="text-xs font-bold uppercase tracking-widest text-slate-900 border-b border-slate-300 pb-1 mb-2">
+              Career Objective
+            </h4>
+            <p class="text-xs sm:text-sm text-slate-700">
+              A fourth-year Bachelor of Science in Information Technology student at STI College – Batangas seeking an On-the-Job Training (OJT) internship position where technical knowledge in full-stack web development, problem-solving abilities, and teamwork skills can be applied in a professional IT environment. Eager to gain practical industry experience while contributing to organizational objectives.
+            </p>
+          </section>
+
+          <section class="mb-5">
+            <h4 class="text-xs font-bold uppercase tracking-widest text-slate-900 border-b border-slate-300 pb-1 mb-2">
+              Education
+            </h4>
+            <ul class="space-y-1.5 text-xs sm:text-sm text-slate-700">
+              <li>
+                <strong class="text-slate-900">STI College Batangas</strong> — Bachelor of Science in Information Technology<br />
+                <span class="text-slate-600"><strong>Relevant Coursework:</strong> Web Development, Database Management Systems, Systems Analysis and Design, Object-Oriented Programming, Networking Fundamentals, Information Security</span><br />
+                <span class="text-slate-600">Expected Graduation: 2027</span>
+              </li>
+              <li><strong class="text-slate-900">Lobo Senior High School:</strong> 2021–2023</li>
+              <li><strong class="text-slate-900">Malabrigo National High School:</strong> 2017–2021</li>
+              <li><strong class="text-slate-900">Malabrigo Elementary School:</strong> 2011–2017</li>
+            </ul>
+          </section>
+
+          <section class="mb-5">
+            <h4 class="text-xs font-bold uppercase tracking-widest text-slate-900 border-b border-slate-300 pb-1 mb-2">
+              Technical Skills
+            </h4>
+            <ul class="space-y-1 text-xs sm:text-sm text-slate-700">
+              <li><strong>Programming Languages:</strong> HTML, CSS, JavaScript, PHP, Python, Java, C#</li>
+              <li><strong>Web and Software Development:</strong> Full-Stack Web Development, Responsive Design, Version Control (Git)</li>
+              <li><strong>Database Management:</strong> MySQL, Database Design and Queries</li>
+              <li><strong>IT and Networking:</strong> Computer Troubleshooting, Network Setup and Basic Configuration</li>
+              <li><strong>Software Tools:</strong> Visual Studio Code, GitHub, Microsoft Office (Word, Excel, PowerPoint)</li>
+            </ul>
+          </section>
+
+          <section class="mb-5">
+            <h4 class="text-xs font-bold uppercase tracking-widest text-slate-900 border-b border-slate-300 pb-1 mb-2">
+              Project Experience
+            </h4>
+            <div class="space-y-2.5 text-xs sm:text-sm text-slate-700">
+              <div>
+                <p class="font-bold text-slate-900">Student Information Management System</p>
+                <ul class="list-disc pl-5 space-y-0.5 mt-0.5">
+                  <li>Designed and developed a full-stack web information management system and a web-based veterinary information system for digital records and operational management.</li>
+                  <li>Implemented back-end logic and database functions using PHP and MySQL.</li>
+                  <li>Created a responsive, user-friendly interface using HTML, CSS, and JavaScript.</li>
+                </ul>
+              </div>
+              <div>
+                <p class="font-bold text-slate-900">Responsive Portfolio Website</p>
+                <ul class="list-disc pl-5 space-y-0.5 mt-0.5">
+                  <li>Developed a personal portfolio website to showcase academic projects and full-stack web development skills.</li>
+                  <li>Applied responsive web design techniques for mobile and desktop devices.</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="mb-5">
+            <h4 class="text-xs font-bold uppercase tracking-widest text-slate-900 border-b border-slate-300 pb-1 mb-2">
+              Training, Certifications, and Awards
+            </h4>
+            <ul class="list-disc pl-5 space-y-0.5 text-xs sm:text-sm text-slate-700">
+              <li><strong>Basic SAP S/4 HANA</strong> — STI College Batangas (June 7, 2025)</li>
+              <li><strong>Java Fundamentals</strong> — STI College Batangas (June 19, 2024)</li>
+              <li><strong>Best in Capstone Research</strong> — Lobo Senior High School (2023)</li>
+            </ul>
+          </section>
+
+          <section>
+            <h4 class="text-xs font-bold uppercase tracking-widest text-slate-900 border-b border-slate-300 pb-1 mb-2">
+              Soft Skills &amp; OJT Availability
+            </h4>
+            <ul class="list-disc pl-5 space-y-0.5 text-xs sm:text-sm text-slate-700">
+              <li><strong>Soft Skills:</strong> Problem-solving and analytical thinking, Team collaboration, Time management, Communication skills, Adaptability and willingness to learn</li>
+              <li><strong>Required OJT Hours:</strong> 486 Hours &nbsp;|&nbsp; <strong>Preferred Start Date:</strong> February 2027</li>
+            </ul>
+          </section>
+        </article>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       COVER LETTER DOCUMENT MODAL
+       ====================================================================== -->
+  <div
+    id="cover-letter-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="cover-letter-modal-title"
+    class="fixed inset-0 z-[80] hidden items-start sm:items-center justify-center p-4 sm:p-6 lg:p-10 modal-backdrop overflow-y-auto"
+  >
+    <div class="glass-card w-full max-w-4xl rounded-3xl overflow-hidden my-auto border border-blue-400/30">
+      <!-- Breadcrumb Header -->
+      <div class="px-5 sm:px-8 py-4 border-b border-white/10 bg-[#050814]/80 flex items-center justify-between gap-3 flex-wrap">
+        <div class="flex items-center gap-3 text-xs sm:text-sm">
+          <button
+            type="button"
+            data-close-cover-letter-modal
+            class="glass-subtle px-3.5 py-1.5 rounded-full text-slate-200 hover:text-white font-medium inline-flex items-center gap-1.5"
+          >
+            <span aria-hidden="true">←</span>
+            <span>Back</span>
+          </button>
+          <span class="text-slate-600" aria-hidden="true">|</span>
+          <span class="text-slate-400">Home</span>
+          <span class="text-slate-600" aria-hidden="true">&gt;</span>
+          <span id="cover-letter-modal-title" class="text-blue-400 font-semibold truncate">
+            Cover_Letter
+          </span>
+        </div>
+
+        <div class="flex items-center gap-2 flex-wrap">
+          <div class="inline-flex items-center p-1 rounded-full glass-subtle border border-white/10" role="tablist" aria-label="Cover letter view mode">
+            <button
+              type="button"
+              role="tab"
+              aria-selected="true"
+              data-cover-view="typed"
+              class="cover-view-btn btn-electric px-3 py-1 rounded-full text-xs font-semibold text-white transition-colors"
+            >
+              Formatted
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected="false"
+              data-cover-view="scan"
+              class="cover-view-btn px-3 py-1 rounded-full text-xs font-semibold text-slate-300 hover:text-white transition-colors"
+            >
+              Original Scan
+            </button>
+          </div>
+
+          <a
+            href="assets/Limerson_Lopez_Cover_Letter.jpg"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="glass-subtle px-3.5 py-1.5 rounded-full text-xs font-semibold text-slate-200 hover:text-white inline-flex items-center gap-1.5"
+          >
+            <span>Open Image</span>
+            <span aria-hidden="true">↗</span>
+          </a>
+          <a
+            href="assets/Limerson_Lopez_Cover_Letter.jpg"
+            download="Limerson_Lopez_Cover_Letter.jpg"
+            class="btn-electric px-3.5 py-1.5 rounded-full text-xs font-semibold text-white inline-flex items-center gap-1.5"
+          >
+            <span>Download</span>
+            <span aria-hidden="true">↓</span>
+          </a>
+          <button
+            type="button"
+            data-close-cover-letter-modal
+            aria-label="Close cover letter preview"
+            class="w-9 h-9 rounded-full glass-subtle text-slate-300 hover:text-white flex items-center justify-center"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-4 sm:p-8 max-h-[80vh] overflow-y-auto bg-[#070d20]/60">
+        <!-- Formatted Document Sheet -->
+        <article
+          data-cover-panel="typed"
+          class="bg-white text-slate-900 rounded-xl shadow-2xl p-6 sm:p-12 max-w-3xl mx-auto text-left font-sans leading-relaxed"
+        >
+          <header class="border-b-2 border-slate-900 pb-4 mb-6">
+            <h3 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-950">LIMERSON LOPEZ</h3>
+            <p class="text-xs sm:text-sm text-slate-600 mt-1">
+              <a href="mailto:limersonlopez05@gmail.com" class="text-blue-700 font-medium hover:underline">limersonlopez05@gmail.com</a>
+              <span class="mx-2 text-slate-400">&bull;</span>
+              <span>October 28, 2024</span>
+            </p>
+          </header>
+
+          <p class="text-sm sm:text-base font-semibold text-slate-900 mb-5">Dear Hiring Manager,</p>
+
+          <div class="space-y-4 text-sm sm:text-[15px] text-slate-700 leading-relaxed">
+            <p>
+              I am a recent Bachelor of Science in Information Technology graduate from STI College Batangas, and I am writing to apply for the Full-Stack Web Developer position at Accenture Philippines. I have long admired Accenture&rsquo;s leadership in digital transformation and software innovation, and I am eager to bring my strong foundation in full-stack development.
+            </p>
+            <p>
+              During my studies, I served as the Team Leader and Primary Developer for our capstone project, where I developed the end-to-end system logic, database management, technical documentation, and the UI/UX design. My toolkit spans PHP programming, cloud computing fundamentals, and network security analysis, enabling me to build secure, responsive, and well-structured web applications.
+            </p>
+            <p>
+              Thank you for considering my application. I would welcome the opportunity to discuss how my technical skills and project leadership experience can contribute to Accenture Philippines and its clients.
+            </p>
+          </div>
+
+          <div class="mt-8 pt-2">
+            <p class="text-sm sm:text-base text-slate-700">Sincerely,</p>
+            <p class="text-base sm:text-lg font-bold text-slate-950 mt-2">Limerson Lopez</p>
+          </div>
+        </article>
+
+        <!-- Handwritten Original Scan -->
+        <div data-cover-panel="scan" class="hidden max-w-2xl mx-auto text-center">
+          <div class="rounded-2xl overflow-hidden border border-white/15 bg-white shadow-2xl">
+            <img
+              src="assets/Limerson_Lopez_Cover_Letter.jpg"
+              alt="Handwritten cover letter by Limerson Lopez"
+              class="w-full h-auto block"
+            />
+          </div>
+          <p class="mt-3 text-xs font-mono-tech text-slate-400">
+            Handwritten Original Scan &mdash; Limerson Lopez (October 28, 2024)
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       TOAST NOTIFICATION
+       ====================================================================== -->
+  <div
+    id="toast-notification"
+    role="status"
+    aria-live="polite"
+    class="fixed bottom-6 right-6 z-[90] opacity-0 translate-y-3 pointer-events-none transition-all duration-300"
+  >
+    <div class="nav-pill px-4 py-2.5 rounded-full flex items-center gap-2.5 text-xs sm:text-sm font-medium text-white shadow-xl">
+      <span id="toast-dot" class="w-2 h-2 rounded-full bg-blue-400"></span>
+      <span id="toast-message">Notification</span>
+    </div>
+  </div>
+</body>
+</html>
